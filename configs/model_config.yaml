@@ -1,0 +1,28 @@
+---
+# spatial attention model config
+img_size: !!python/tuple [1080, 1920]
+in_chans: 3
+patch_size: 128
+embed_dim: 768
+depth: 12
+num_heads: 12
+qkv_bias: True
+mlp_ratio: 4
+drop_rate: 0
+bb1_db_depth: 1
+loss_alpha: 0.4
+# edit these for different runs
+lr: 1.0e-04
+decay_step: 2
+decay_rate: 0.75
+# mislnet spatfe config
+fe: mislnet
+fe_config:
+  patch_size: 128
+  num_classes: 33
+fe_ckpt: "/home/tai/df_models/lab04_220401_mislnet_video_v1_ep=57_vl=0.6216.ckpt"
+fe_freeze: False
+# dataset
+custom_dataset_name: "vcms"
+# ablation_codename
+ablation_codename: ""
