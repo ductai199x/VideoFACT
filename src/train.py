@@ -151,7 +151,7 @@ def main():
         "--log-dir",
         type=str,
         help="the path to the log directory",
-        default="src/lightning_logs",
+        default="lightning_logs",
     )
     parser.add_argument(
         "--gpus",

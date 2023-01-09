@@ -4,9 +4,9 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from .common.long_dist_attn import LongDistanceAttention
-from .common.mislnet import MISLnetPLWrapper
-from .common.xception import Xception, XceptionPLWrapper
+from ..common.long_dist_attn import LongDistanceAttention
+from ..common.mislnet import MISLnetPLWrapper
+from ..common.xception import Xception, XceptionPLWrapper
 
 
 class VideoFACT(nn.Module):
@@ -78,10 +78,10 @@ class VideoFACT(nn.Module):
         )
 
         self.classifier = nn.Sequential(
-            nn.LazyLinear(200),
+            nn.Conv2d(embed_dim, 200, kernel_size=(1, 1), bias=False),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.LazyLinear(2),
+            nn.Conv2d(200, 2, kernel_size=(1, 1), bias=False),
             nn.Flatten(),
             nn.ReLU(),
             nn.Dropout(0.2),
@@ -130,10 +130,11 @@ class VideoFACT(nn.Module):
         # scale the embeddings by the attention maps
         scaled_bb_fe = torch.einsum("ijk,ilj->iljk", bb_fe, lda_maps)
         # scaled_bb = scaled_bb.contiguous().view(B, -1)
-        scaled_bb_fe = torch.einsum("iljk->ijk", scaled_bb_fe)
+        scaled_bb_fe = torch.einsum("iljk->ijk", scaled_bb_fe) # B, P, C = scaled_bb_fe.shape
 
-        # feed the scaled embeddings to a classifier to get the output
+        # we need to go from BPC to BCP1 in order to feed into the nn.Conv2d 1x1 layers (reducing C -> 1)
+        scaled_bb_fe = scaled_bb_fe.permute(0, 2, 1).unsqueeze(-1)
         class_label = self.classifier(scaled_bb_fe)
-        patch_label = self.localizer(scaled_bb_fe.permute(0, 2, 1).unsqueeze(-1))  # for localization
+        patch_label = self.localizer(scaled_bb_fe)
         patch_label = patch_label.view(B, -1)
         return class_label, patch_label

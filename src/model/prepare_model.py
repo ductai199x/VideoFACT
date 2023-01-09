@@ -1,7 +1,7 @@
 import importlib
 from .videofact_pl_wrapper import VideoFACTPLWrapper
 
-v11_ablations_codenames = [
+available_ablations_codenames = [
     "1_templates",  # 0
     "10_templates",  # 1
     "concat_scaled_fe",  # 2
@@ -15,11 +15,11 @@ v11_ablations_codenames = [
 
 def prepare_model(ablation_codename: str, prev_ckpt: str, config):
     if ablation_codename == "":
-        import_path = f"src.model.videofact"
+        import_path = f"src.model.common.videofact"
     else:
-        if ablation_codename not in v11_ablations_codenames:
+        if ablation_codename not in available_ablations_codenames:
             raise NotImplementedError(
-                f"{ablation_codename} does not exists. Available codenames for v11 are: {v11_ablations_codenames}"
+                f"{ablation_codename} does not exists. Available codenames for v11 are: {available_ablations_codenames}"
             )
         import_path = f"src.model.ablations.videofact_{ablation_codename}"
     torch_model = importlib.import_module(import_path).VideoFACT
