@@ -22,7 +22,7 @@ MODEL_CONFIG = dict()
 
 
 def prepare_datasets():
-    train_dl, val_dl = load_training_data(ARGS.custom_dataset_name)
+    train_dl, val_dl = load_training_data(ARGS.dataset_name)
     return train_dl, val_dl
 
 
@@ -45,7 +45,7 @@ def train():
     model_ckpt = ModelCheckpoint(
         dirpath=f"{ARGS.log_dir}/version_{ARGS.version}/checkpoints",
         monitor="val_class_acc_epoch",
-        filename=f"{ARGS.pre}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
+        filename=f"{ARGS.pre + '-' if ARGS.pre != '' else ''}{ARGS.ablation_codename}-{ARGS.dataset_name}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
         verbose=True,
         save_last=True,
         save_top_k=1,
@@ -96,7 +96,7 @@ def parse_args():
         ext_conf = yaml.load(f, Loader=yaml.FullLoader)
         for k in ext_conf:
             MODEL_CONFIG[k] = ext_conf[k]
-        ARGS.__setattr__("custom_dataset_name", MODEL_CONFIG["custom_dataset_name"])
+        ARGS.__setattr__("dataset_name", MODEL_CONFIG["dataset_name"])
         ARGS.__setattr__("ablation_codename", MODEL_CONFIG["ablation_codename"])
 
     print(json.dumps(MODEL_CONFIG, indent=4))
@@ -137,7 +137,7 @@ def main():
         "-v",
         "--version",
         type=str,
-        help="the version of this model (same as the one saved in log dir",
+        help="the version of this model (same as the one saved in log dir)",
         default=0,
     )
     parser.add_argument(

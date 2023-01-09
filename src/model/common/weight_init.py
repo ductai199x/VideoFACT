@@ -5,7 +5,7 @@ import warnings
 from torch.nn.init import _calculate_fan_in_and_fan_out
 
 
-def _no_grad_trunc_normal_(tensor, mean, std, a, b):
+def _no_grad_trunc_normal_(tensor: torch.Tensor, mean, std, a, b):
     # Cut & paste from PyTorch official master until it's in a few official releases - RW
     # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
     def norm_cdf(x):

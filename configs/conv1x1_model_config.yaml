@@ -21,8 +21,8 @@ fe_config:
   patch_size: 128
   num_classes: 33
 fe_ckpt: "/home/tai/df_models/lab04_220401_mislnet_video_v1_ep=57_vl=0.6216.ckpt"
-fe_freeze: False
+fe_freeze: True
 # dataset
 dataset_name: "vcms"
 # ablation_codename
-ablation_codename: ""
+ablation_codename: "conv1x1"

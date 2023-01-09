@@ -16,10 +16,10 @@ class VideoFACTPLWrapper(LightningModule):
         super().__init__()
 
         self.model = model(**config)
-        self.train_class_acc = Accuracy()
-        self.val_class_acc = Accuracy()
-        self.test_class_acc = Accuracy()
-        self.test_class_auc = AUROC(num_classes=2, compute_on_step=False)
+        self.train_class_acc = Accuracy(task="multiclass", num_classes=2)
+        self.val_class_acc = Accuracy(task="multiclass", num_classes=2)
+        self.test_class_acc = Accuracy(task="multiclass", num_classes=2)
+        self.test_class_auc = AUROC(task="multiclass", num_classes=2, compute_on_step=False)
         self.test_loc_f1 = []
         self.test_loc_mcc = []
 

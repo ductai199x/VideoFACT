@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from ..common.long_dist_attn import LongDistanceAttention
+from .long_dist_attn_conv1x1 import LongDistanceAttention
 from ..common.mislnet import MISLnetPLWrapper
 from ..common.xception import Xception, XceptionPLWrapper
 
@@ -85,7 +85,7 @@ class VideoFACT(nn.Module):
             nn.Flatten(),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.LazyLinear(2),
+            nn.Linear(240, 2),
         )
 
         self.localizer = nn.Sequential(

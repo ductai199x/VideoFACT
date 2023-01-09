@@ -140,8 +140,8 @@ class MISLnetPLWrapper(LightningModule):
 
         self.example_input_array = torch.randn(2, 3, patch_size, patch_size)
 
-        self.train_acc = Accuracy()
-        self.val_acc = Accuracy()
+        self.train_acc = Accuracy(task="multiclass", num_classes=2)
+        self.val_acc = Accuracy(task="multiclass", num_classes=2)
 
     def forward(self, x):
         return self.model(x)
