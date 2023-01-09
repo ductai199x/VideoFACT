@@ -78,14 +78,14 @@ class VideoFACT(nn.Module):
         )
 
         self.classifier = nn.Sequential(
-            nn.Conv2d(embed_dim, 200, kernel_size=(1, 1), bias=False),
+            nn.Conv2d(embed_dim, 200, kernel_size=(1, 1), bias=True),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.Conv2d(200, 2, kernel_size=(1, 1), bias=False),
+            nn.Conv2d(200, 2, kernel_size=(1, 1), bias=True),
             nn.Flatten(),
             nn.ReLU(),
             nn.Dropout(0.2),
-            nn.Linear(240, 2),
+            nn.LazyLinear(2),
         )
 
         self.localizer = nn.Sequential(
