@@ -45,7 +45,7 @@ def train():
     model_ckpt = ModelCheckpoint(
         dirpath=f"{ARGS.log_dir}/version_{ARGS.version}/checkpoints",
         monitor="val_class_acc_epoch",
-        filename=f"{ARGS.pre + '-' if ARGS.pre != '' else ''}{ARGS.ablation_codename}-{ARGS.dataset_name}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
+        filename=f"{{ARGS.pre + '-' if ARGS.pre != '' else ''}}{{ARGS.ablation_codename}}-{{ARGS.dataset_name}}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
         verbose=True,
         save_last=True,
         save_top_k=1,
