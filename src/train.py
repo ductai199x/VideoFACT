@@ -45,16 +45,16 @@ def train():
     model_ckpt = ModelCheckpoint(
         dirpath=f"{ARGS.log_dir}/version_{ARGS.version}/checkpoints",
         monitor="val_class_acc_epoch",
-        filename=f"{{ARGS.pre + '-' if ARGS.pre != '' else ''}}{{ARGS.ablation_codename}}-{{ARGS.dataset_name}}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
+        filename=f"{ARGS.pre + '-' if ARGS.pre != '' else ''}{ARGS.ablation_codename}-{ARGS.dataset_name}-{{epoch:02d}}-{{val_class_acc_epoch:.4f}}",
         verbose=True,
         save_last=True,
         save_top_k=1,
         mode="max",
     )
     callbacks = (
-        [ModelSummary(-1), TQDMProgressBar(refresh_rate=1), model_ckpt] + []
+        [ModelSummary(-1), TQDMProgressBar(refresh_rate=1), model_ckpt] + ([]
         if ARGS.fast_dev_run
-        else [lr_monitor]
+        else [lr_monitor])
     )
     trainer = Trainer(
         accelerator="gpu",
@@ -144,7 +144,7 @@ def main():
         "--force-version",
         type=str,
         help="ignore version conflict",
-        default="False",
+        default="True",
     )
     parser.add_argument(
         "-l",
