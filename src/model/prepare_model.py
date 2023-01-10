@@ -35,6 +35,7 @@ available_ablations_codenames = [
     "no_transformer",  # 6
     "no_transformer_yes_templates",  # 7
     "conv1x1", # 8
+    "conv2d_classifier", # 9
 ]
 
 
